@@ -6,8 +6,8 @@
 	<META NAME="GENERATOR" CONTENT="LibreOffice 3.5  (Linux)">
 	<META NAME="AUTHOR" CONTENT="Daniela ">
 	<META NAME="CREATED" CONTENT="20130616;17351200">
-	<META NAME="CHANGEDBY" CONTENT="Daniela ">
-	<META NAME="CHANGED" CONTENT="20130630;14054100">
+	<META NAME="CHANGEDBY" CONTENT="Daniela Remenska">
+	<META NAME="CHANGED" CONTENT="20130701;16311000">
 	<STYLE TYPE="text/css">
 	<!--
 		@page { margin: 0.79in }
@@ -23,219 +23,439 @@ read March 2013:</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">------------------------------</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">Towards
+a Maude Tool for Model Checking Temporal Graph Properties Visual
+temporal logic as a rapid prototyping tool</SPAN></B></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
+major novelty of our tool is that it provides a model checker for
+temporal graph properties based on counterpart semantics for
+quantified μ -calculi. Graph transformation systems are specified
+with term rewrite rules. In particular, we present first an
+implementation of graph rewriting as conditional rewrite rules on
+object multisets, which allows us to compositionally specify
+concurrent systems in an object-oriented fashion. </SPAN></FONT></FONT></FONT>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Then
+we introduce a prototypical model checker that can be used to check
+quantified μ -calculus formulae against system specifications. As
+far as we know, our tool is one of the few model checkers for a
+quantified μ -calculus and one of the few ones based on counterpart
+semantics, allowing for a finer analysis of the evolution of
+individual components.</SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Graph
+rewrite rules To compositionally specify concurrent systems, we offer
+an object oriented language, based on an implementation of the double
+pushout approach (DPO) to graph rewriting: our systems can be hence
+seen as graph transformation systems specified by an initial state
+and a set of term rewrite rules given in DPO style. The main idea is
+that each rule has a left-hand side and a right-hand side pattern,
+each one composed by a set of objects (nodes) possibly interrelated
+by means of relation attributes (edges).  The aim of this section is
+to illustrate the use of the tool to verify properties of the
+evolution of software systems, focusing on properties of
+individuals.</SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">For
+the rest of this section we fix an instance of our running example
+with n = 2, where all the people of the same gender have the same
+ranking. An interesting property is the one stating that every time
+a male becomes single, he will later on become married.  </SPAN></FONT></FONT></FONT>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><I><SPAN STYLE="background: transparent">forall
+xMale(0). AG((status(xMale(0)) = status: single) -&gt;
+(AF(status(xMale(0)) = status: married)))</SPAN></I></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Other
+interesting properties regard the consistency of marriages. A
+meaningful example is “is it possible for two males to claim to be
+married with the same female?”, expressed by the formula</SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><I><SPAN STYLE="background: transparent">not(xMale(0)
+= xMale(1)) and (marriedWith(xMale(0)) = marriedWith(xMale(1)))</SPAN></I></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">This
+can seem an erroneous scenario, but actually it happens because of
+the asynchronous and distributed fashion of the modelled algorithm:
+when a married woman accepts a new marriage proposal, she sends a
+divorce notification to the former partner and an accept notification
+to the new partner. In the case in which the accept notification is
+handled before the divorce one we have two males claiming to be
+married with the same woman. The consistency is restored at the next
+step, after the handling of the divorce notification. In its current
+form, the model checker generates the entire counterpart model for a
+given specification and checks formulae on it. That is, our model
+checker does not yet verify properties on-the-fly, neither it does
+apply optimisation techniques based on symmetry or abstraction
+reduction. These issues are subject of current work as they could
+push our approach beyond its current bounded model checking form.</SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">------------------------------</SPAN></B></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">Mapping
+of Structured English Sentences to CCTL Formulae</SPAN></B></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">------------------------------</SPAN></B></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent"></SPAN></B><SPAN STYLE="font-weight: normal"><SPAN STYLE="background: transparent">Their
+prospects for gaining comprehensibility of even complex
+specification are deemed so high that it should be possible to
+simultaneously further the level of formality without sacrificing
+understandability. However, even with graphical specifications, the
+global interaction patterns of complex (for example, distributed)
+systems remain complex and, furthermore, it seems that graphical
+idioms also tend to hide some of the fine-grain semantics from the
+user, at least from the non-expert one. Thus, while being a big step
+ahead, graphical specification formalisms are not per se a means for
+ensuring that “what you specify is what you mean”.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">A
+traditional remedy is rapid prototyping, where a partially developed
+product is brought into executable shape in order to assess its
+compliance with expectations. We suggest to take over the paradigm of
+“rapid prototyping” to the realm of formal, graphical, and
+declarative (i.e., intrinsically non-operational) specifications such
+that these become executable, thereby facilitating early evaluation
+of specifications on an operational model. If such a prototyping
+process is based on an unambiguous semantics of specifications and
+applies rigorous rules for deriving executables from specifications
+then it can, furthermore, be made sure that the prototype obtained is
+in strict correspondence with the specification such that the
+evaluation is faithful.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">Real-time</SPAN></B><SPAN STYLE="font-weight: normal"><SPAN STYLE="background: transparent">
+symbolic timing diagrams (RTSTDs, for short), as introduced in [2],
+are a graphical formalism for specifying behavioural requirements on
+hard real-time embedded systems. They are a full- edged metric-time
+temporal logic, but with a graphical syntax reminiscent of the
+informal timing diagrams widely used in electrical engineering.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">An
+activation mode. Initial diagrams describe requirements on the
+initial system behaviour whereas</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">an
+invariant diagrams expresses requirements which must be satisfied at
+any time during system lifetime. Invariant mode corresponds to the
+‘always’ modality of linear-time temporal logic. This causes the
+timing diagram to be preempted and thus to impose no further
+constraints on the temporal behaviour as soon as any weak constraint
+arc becomes violated.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">Being
+motivated by the needs of synchronous system design, we slightly
+deviate from the usual interpretation of clocks in timed automata
+[11] and assume that clocks count transitions rather than an
+independent system time. Note that this is in fact equivalent to
+assuming that one transition takes place every time instant, which
+can be enforced by using an additional clock in the standard model
+of timed automata. Our convention merely saves this clock.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">However,
+this construction is extremely expensive due to the double
+complementation of Buchi automata involved. This is the reason for
+in practice confining ourselves to deterministic timing diagrams.
+These yield timed Buchi automata ATD which are extremely simple and
+cheap to complement, as they are deterministic and the only kind of
+loops occurring in above construction is self-loops, where a state
+directly loops back to itself. Under these circumstances,
+complementation of ATD can be achieved by simply complementing the
+set of accepting states, 4 even though we are dealing with Buchi
+acceptance.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">With
+the basic method, game graphs grow exponentially in the number of
+timing diagrams due to the automaton product involved in dealing with
+conjunction. As this would render application for rapid prototyping
+impractical, the ICOS tools o er modified procedures which reduce
+the complexity of dealing with large specifications. Obviously, such
+extensions cannot deal efficiently with arbitrary RTSTD
+specifications, but they are, however, carefully designed to cover
+the typical specification patterns.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">The
+first such variant is a compositional extension of the basic
+algorithm. Within this approach, which is sketched in Fig. 5, the
+specification is first partitioned into a maximal set of groups of
+formulae G1 ; : : : ; Gn such that each output is constrained by the
+formulae of at most one group.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">Then
+synthesis down to a winning strategy is performed for each group
+individually, yielding for each group Gi a Moore automaton Ai that
+has just the outputs constrained by Gi as outputs, and all other
+ports as inputs. The individual Moore automata are then compiled to
+synthesizable VHDL and composed by parallel composition.</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">Completeness
+is, however, lost using compositional synthesis. The problem is that
+a certain group may not be synthesizable without knowledge about the
+behaviour of another group. Such problems are regularly encountered
+within compositional methods, and we propose to solve them by just
+the same techniques that proved to be helpful in compositional
+veriÿcation: the necessary information on the other components can
+be formalized via assumptions (for example, through weak constraint
+arcs).</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">This
+makes dealing with timing constraints of more than a handful time
+units hardly affordable—realistic real-time system programming
+cannot be done with such code generation methods. Therefore, we are
+heading for an algorithm that is of linear complexity in the number
+of timing constraints, even though completeness is thereby
+necessarily sacriÿced. What is thus needed is a synthesis method
+that separates generation of timers controlling the allowable passage
+of time from synthesis of an untimed control skeleton. From then on,
+synthesis treats the timers similar to environment components, which
+means that the behaviour of these components is left untouched
+during synthesis. </SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">We
+have presented a rapid-prototyping framework for requirements
+speciÿcations that are for-</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">malised
+through real-time symbolic timing diagrams, a metric-time temporal
+logic with a graphical</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">syntax
+akin to the informal timing diagrams used in electrical engineering</SPAN></SPAN></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">------------------------------</SPAN></B></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">Events
-and Constraints: A Graphical Editor for Capturing Logic Requirements
-of Programs</SPAN></B></FONT></FONT></FONT></P>
+and Constraints: A Graphical Editor for Capturing Logic Requirements
+of Programs </SPAN></B></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">A
-stumbling block can be that model checking tools expect the user to
-supply a formal statement of the correctness requirements to be
-checked in temporal logic. Expressing non-trivial requirements in
-logic, however, can be challenging. To address this problem, we
-developed a graphical tool, the TimeLine Editor, that simplifies the
-formalization of certain kinds of requirements. <B>The TimeLine
-editor simplified the task of converting a large body of English
-prose requirements into formal, yet readable, logic requirements. </B></SPAN></FONT></FONT></FONT>
+stumbling block can be that model checking tools expect the user to
+supply a formal statement of the correctness requirements to be
+checked in temporal logic. Expressing non-trivial requirements in
+logic, however, can be challenging. To address this problem, we
+developed a graphical tool, the TimeLine Editor, that simplifies the
+formalization of certain kinds of requirements. <B>The TimeLine
+editor simplified the task of converting a large body of English
+prose requirements into formal, yet readable, logic requirements. </B></SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">In
-the absence of specific requirements to be checked, a model checker
-will check for some generally desirable program requirements such
-as: absence of deadlock, livelock, and unreachable code. However, if
-one wants to check specific requirements, or in other words, check
-that the source code satisfies application-specific requirements,
-then some requirements must be defined. LTL allows one to describe
-how a system’s events and states are related over time, which is
-exactly what we need for expressing logic control and communications
-requirements. To support the second approach, we built a graphical
-TimeLine Editor that can generate formal requirements from a visual
-representation of required causal relations. The TimeLine Editor is
-well suited for expressing the types of requirements encountered in
-the PathStar application. Specifically the TimeLine Editor can
-express requirements with a preamble (a sequence of events that act
-as a pattern to be matched against execution sequences) and a
-response. Other visual notations [1][13] have been developed to
-address the expressive needs of different applications, or to
-express a broader set of requirements. </SPAN></FONT></FONT></FONT>
+the absence of specific requirements to be checked, a model checker
+will check for some generally desirable program requirements such as:
+absence of deadlock, livelock, and unreachable code. However, if one
+wants to check specific requirements, or in other words, check that
+the source code satisfies application-specific requirements, then
+some requirements must be defined. LTL allows one to describe how a
+system’s events and states are related over time, which is exactly
+what we need for expressing logic control and communications
+requirements. To support the second approach, we built a graphical
+TimeLine Editor that can generate formal requirements from a visual
+representation of required causal relations. The TimeLine Editor is
+well suited for expressing the types of requirements encountered in
+the PathStar application. Specifically the TimeLine Editor can
+express requirements with a preamble (a sequence of events that act
+as a pattern to be matched against execution sequences) and a
+response. Other visual notations [1][13] have been developed to
+address the expressive needs of different applications, or to express
+a broader set of requirements. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">To
-be amenable to model checking, a requirement must also specify the
-temporal behavior of a system; that is, how the system acts in
-response to external stimuli and internal conditions over time. </SPAN></FONT></FONT></FONT>
+be amenable to model checking, a requirement must also specify the
+temporal behavior of a system; that is, how the system acts in
+response to external stimuli and internal conditions over time. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Spin
-uses the formal requirements (expressed in temporal logic or with
-the help of the TimeLine Editor tool) to fine-tune the program model
-with a slicing technique. <B>The slicing algorithm in Spin uses
-data dependency analysis and control flow analysis to automatically
-abstract away details of the model that are not relevant to the
-requirement being checked, while retaining the parts of the model
-that are relevant to the requirement. The abstraction that is
-employed here has the important property that it is logically
-conservative, which means that if the abstracted model can be shown
-to satisfy the correctness requirement, then the original source
-program necessarily also satisfies that requirement. Using the
-requirements to guide the generation of the abstract model of the
-source code helps to ensure that the levels of abstractions in the
-requirement and the model match. </B>For instance, if the
-requirements are concerned with the fact that a full digit string
-has been entered rather than the particular digits in the digit
-string, then in the model  extraction step we can automatically
-abstract away most of the details of the digit analysis code so that
-we only retain the possible outcomes: invalid digits, partial digits
-or full digit string. </SPAN></FONT></FONT></FONT>
+uses the formal requirements (expressed in temporal logic or with the
+help of the TimeLine Editor tool) to fine-tune the program model with
+a slicing technique. <B>The slicing algorithm in Spin uses data
+dependency analysis and control flow analysis to automatically
+abstract away details of the model that are not relevant to the
+requirement being checked, while retaining the parts of the model
+that are relevant to the requirement. The abstraction that is
+employed here has the important property that it is logically
+conservative, which means that if the abstracted model can be shown
+to satisfy the correctness requirement, then the original source
+program necessarily also satisfies that requirement. Using the
+requirements to guide the generation of the abstract model of the
+source code helps to ensure that the levels of abstractions in the
+requirement and the model match. </B>For instance, if the
+requirements are concerned with the fact that a full digit string has
+been entered rather than the particular digits in the digit string,
+then in the model  extraction step we can automatically abstract away
+most of the details of the digit analysis code so that we only retain
+the possible outcomes: invalid digits, partial digits or full digit
+string. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">In
-traditional testing one would drive the system into a particular
-state of interest by feeding it a sequence of events, called the
-preamble. After the preamble, the tester awaits the expected
-response. In model checking the preamble becomes a pattern that is
-matched against the executions of the system. The requirement
-defined by the highlighted path should pass the check. This means
-that if the model checker can find any execution where the initial
-state and preamble occur, but the required event does not, this will
-be reported as a violation of the requirement. Just as in
-traditional testing, in model checking the requirement is not useful
-if the preamble is not correct. In model checking an incorrect
-preamble could give a vacuously positive result because it might not
-match any execution in the system. We can debug the preamble by
-asking the model checker to find at least one sequence that matches
-the preamble. If the model checker finds a match, then we know that
-our preamble is not vacuous. If the model checker does not find such
-an execution, the preamble is likely to be incorrect and we can
-reconsider its definition. Describing an accurate preamble can be
-cumbersome in temporal logic. In LTL, chains of events are most
-naturally expressed by a continued functional nesting of Until sub
-formulae. </SPAN></B></FONT></FONT></FONT></P>
+traditional testing one would drive the system into a particular
+state of interest by feeding it a sequence of events, called the
+preamble. After the preamble, the tester awaits the expected
+response. In model checking the preamble becomes a pattern that is
+matched against the executions of the system. The requirement defined
+by the highlighted path should pass the check. This means that if the
+model checker can find any execution where the initial state and
+preamble occur, but the required event does not, this will be
+reported as a violation of the requirement. Just as in traditional
+testing, in model checking the requirement is not useful if the
+preamble is not correct. In model checking an incorrect preamble
+could give a vacuously positive result because it might not match any
+execution in the system. We can debug the preamble by asking the
+model checker to find at least one sequence that matches the
+preamble. If the model checker finds a match, then we know that our
+preamble is not vacuous. If the model checker does not find such an
+execution, the preamble is likely to be incorrect and we can
+reconsider its definition. Describing an accurate preamble can be
+cumbersome in temporal logic. In LTL, chains of events are most
+naturally expressed by a continued functional nesting of Until sub
+formulae. </SPAN></B></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">To
-clarify what was meant by a certain LTL requirement, a timeline
-diagram would be drawn on the board. Once it was observed that the
-timeline diagram could express the requirements of interest to the
-application, and that it was possible to automatically convert the
-timeline diagrams directly to Büchi automata, a decision was made
-to build the TimeLine Editor tool. A timeline is represented by a
-wide horizontal bar, as illustrated in Figure 3, <B>with time
-progressing from left to right.</B> (← beware!!) Descending from
-the timeline bar are vertical bars, called marks, which mark the
-interesting event occurrences, ordered in time. The events can be
-generated anywhere in the system, by any one of many concurrent
-processes in the distributed system. Therefore, no fixed
-time-interval can be assumed between subsequent marks (there is no
-hidden assumption of a “global clock”). There are three types of
-system events that can be indicated on the timeline. <B>Regular</B>
-events - denoted by the letter <B>e</B>. These are optional events,
-that are used to identify the precise executions of the system that
-we are interested in. For a switch, a regular event could be the
-user going offhook, flashing the hook, or the arrival of an incoming
-call. Most regular events are generated by test harness components,
-that is, the stubs of components external to the system under test.
-<B>Required</B> events - denoted by the letter <B>r</B>. These are
-events that are required to occur if all previous events (regular
-and required) on the timeline have occurred, under the applicable
-constraints (more about constraints later). It is an error if is
-possible for a required event to be absent from an execution under
-these circumstances. For a switch, a required event might be the
-generation of dialtone, or the forwarding of a call. <B>Fail</B>
-events - denoted by the letter <B>f </B>and a red X. These are
-events that should not occur if all previous events (regular and
-required) on the timeline have occurred, under the applicable
-constraints. In addition to events, there are also constraints,
-which are black horizontal lines positioned beneath the timeline
-bar. We can use constraints to specify that we are not interested in
-the occurrence of particular events over certain intervals of the
-requirement. For instance, if there is a requirement that the system
-must respond to an offhook by providing dialtone, we can specify the
-constraint !onhook for the interval between the offhook and the
-dialtone event.</SPAN></FONT></FONT></FONT></P>
+clarify what was meant by a certain LTL requirement, a timeline
+diagram would be drawn on the board. Once it was observed that the
+timeline diagram could express the requirements of interest to the
+application, and that it was possible to automatically convert the
+timeline diagrams directly to Büchi automata, a decision was made to
+build the TimeLine Editor tool. A timeline is represented by a wide
+horizontal bar, as illustrated in Figure 3, <B>with time progressing
+from left to right.</B> (← beware!!) Descending from the timeline
+bar are vertical bars, called marks, which mark the interesting event
+occurrences, ordered in time. The events can be generated anywhere in
+the system, by any one of many concurrent processes in the
+distributed system. Therefore, no fixed time-interval can be assumed
+between subsequent marks (there is no hidden assumption of a “global
+clock”). There are three types of system events that can be
+indicated on the timeline. <B>Regular</B> events - denoted by the
+letter <B>e</B>. These are optional events, that are used to identify
+the precise executions of the system that we are interested in. For a
+switch, a regular event could be the user going offhook, flashing the
+hook, or the arrival of an incoming call. Most regular events are
+generated by test harness components, that is, the stubs of
+components external to the system under test. <B>Required</B> events
+- denoted by the letter <B>r</B>. These are events that are required
+to occur if all previous events (regular and required) on the
+timeline have occurred, under the applicable constraints (more about
+constraints later). It is an error if is possible for a required
+event to be absent from an execution under these circumstances. For a
+switch, a required event might be the generation of dialtone, or the
+forwarding of a call. <B>Fail</B> events - denoted by the letter <B>f
+</B>and a red X. These are events that should not occur if all
+previous events (regular and required) on the timeline have occurred,
+under the applicable constraints. In addition to events, there are
+also constraints, which are black horizontal lines positioned beneath
+the timeline bar. We can use constraints to specify that we are not
+interested in the occurrence of particular events over certain
+intervals of the requirement. For instance, if there is a requirement
+that the system must respond to an offhook by providing dialtone, we
+can specify the constraint !onhook for the interval between the
+offhook and the dialtone event. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">In
-addition to events, there are also constraints, which are black
-horizontal lines positioned beneath the timeline bar. We can use
-constraints to specify that we are not interested in the occurrence
-of particular events over certain intervals of the requirement. For
-instance, if there is a requirement that the system must respond to
-an offhook by providing dialtone, we can specify the constraint
-!onhook for the interval between the offhook and the dialtone
-event. A constraint begins at one mark and ends at the same or at a
-subsequent mark. A constraint can include or exclude the marks where
-it begins or ends. If a constraint excludes a mark the end point of
-the constraint will not overlap the mark but will terminate with a
-short vertical bar near the mark. If a constraint excludes its begin
-mark, then the constraint does not apply when the event attached to
-this mark occurs (but it still may hold unless expressly stated
-otherwise by another constraint) but it applies at the event
-immediately following the event attached to the begin mark. </SPAN></FONT></FONT></FONT></P>
+addition to events, there are also constraints, which are black
+horizontal lines positioned beneath the timeline bar. We can use
+constraints to specify that we are not interested in the occurrence
+of particular events over certain intervals of the requirement. For
+instance, if there is a requirement that the system must respond to
+an offhook by providing dialtone, we can specify the constraint
+!onhook for the interval between the offhook and the dialtone event.
+A constraint begins at one mark and ends at the same or at a
+subsequent mark. A constraint can include or exclude the marks where
+it begins or ends. If a constraint excludes a mark the end point of
+the constraint will not overlap the mark but will terminate with a
+short vertical bar near the mark. If a constraint excludes its begin
+mark, then the constraint does not apply when the event attached to
+this mark occurs (but it still may hold unless expressly stated
+otherwise by another constraint) but it applies at the event
+immediately following the event attached to the begin mark. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">A
-system constraint can be more complicated condition than a simple
-event. The example requirement in Figure 4, for instance, uses the
-condition idle in a constraint. Idle is not an event but rather
-expresses a condition on the system state, which is defined
-separately in terms of, e.g., values of variables at the state. Idle
-is a fairly general condition that includes both execution sequences
-where the user has never gone offhook and those in which the user
-has gone onhook since the last offhook. In general, a timeline must
-contain at least one required or fail event. Normally, the final
-event on the timeline will be a required or fail event. A timeline
-need not contain</SPAN></FONT></FONT></FONT></P>
+system constraint can be more complicated condition than a simple
+event. The example requirement in Figure 4, for instance, uses the
+condition idle in a constraint. Idle is not an event but rather
+expresses a condition on the system state, which is defined
+separately in terms of, e.g., values of variables at the state. Idle
+is a fairly general condition that includes both execution sequences
+where the user has never gone offhook and those in which the user has
+gone onhook since the last offhook. In general, a timeline must
+contain at least one required or fail event. Normally, the final
+event on the timeline will be a required or fail event. A timeline
+need not contain </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
-<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">constraints.</SPAN></FONT></FONT></FONT></P>
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">constraints.
+</SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
-test automaton produced from the timeline specification is a kind of
-automaton called a Büchi automaton, as will be explained shortly.
-State s1 is called an accepting state, indicated by the double
-circle. If we find an execution where the test automaton can remain
-in such an accepting state indefinitely, that execution constitutes
-a violation of our timeline requirement, and the model checker will
-report it as an error. So, another occurrence of, p2 &amp;&amp; p4
-&amp;&amp; p5, must be observed to avoid an error report from the
-model checker. </SPAN></FONT></FONT></FONT>
+test automaton produced from the timeline specification is a kind of
+automaton called a Büchi automaton, as will be explained shortly.
+State s1 is called an accepting state, indicated by the double
+circle. If we find an execution where the test automaton can remain
+in such an accepting state indefinitely, that execution constitutes a
+violation of our timeline requirement, and the model checker will
+report it as an error. So, another occurrence of, p2 &amp;&amp; p4 &amp;&amp;
+p5, must be observed to avoid an error report from the model checker.
+</SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">The
-interpretation of accepting states is what differentiates a Büchi
-automaton from a standard finite automaton. A Büchi automaton is
-used to trap infinite execution sequences that violate a
-requirement, whereas a standard automaton can only trap finite
-execution sequences. The Spin model checker uses the Never Claim
-version of the automata, also produced by the TimeLine Editor. In
-general, each required event will have an associated accepting state
-where we wait for that event to occur. </SPAN></B></FONT></FONT></FONT></P>
+interpretation of accepting states is what differentiates a Büchi
+automaton from a standard finite automaton. A Büchi automaton is
+used to trap infinite execution sequences that violate a requirement,
+whereas a standard automaton can only trap finite execution
+sequences. The Spin model checker uses the Never Claim version of the
+automata, also produced by the TimeLine Editor . In general, each
+required event will have an associated accepting state where we wait
+for that event to occur. </SPAN></B></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Each
-fail event will have an associated accepting state that we
-transition to if the fail event occurs in the specifiedinterval. The
-transition to the fail state is made from the wait state associated
-with the regular or required event directly following the fail
-event.  The fail state has a self loop labeled true because once in
-the fail state, we remain there for the remainder of the execution.</SPAN></FONT></FONT></FONT></P>
+fail event will have an associated accepting state that we transition
+to if the fail event occurs in the specified interval. The transition
+to the fail state is made from the wait state associated with the
+regular or required event directly following the fail event.  The
+fail state has a self loop labeled true because once in the fail
+state, we remain there for the remainder of the execution. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Timelines
-are restricted to have at most one consecutive fail event. To
-express that more than one event <B> </B>can cause a transition to
-the fail state while waiting for the next regular or required event,
-the names of the fail events may be joined via a logical or ( || )
-on a single fail event label. Constraints must be contiguous between
-non-fail events. Test automata generated from timeline
-specifications constitute a limited fragment of the properties
-expressible in Linear Temporal Logic. In particular, timelines
-without fail events correspond to certain <B>liveness</B>
-properties.</SPAN></FONT></FONT></FONT></P>
+are restricted to have at most one consecutive fail event. To express
+that more than one event <B> </B>can cause a transition to the fail
+state while waiting for the next regular or required event, the names
+of the fail events may be joined via a logical or ( || ) on a single
+fail event label. Constraints must be contiguous between non-fail
+events. Test automata generated from timeline specifications
+constitute a limited fragment of the properties expressible in Linear
+Temporal Logic. In particular, timelines without fail events
+correspond to certain <B>liveness</B> properties.</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><B>The
-formal definition of liveness [8],[10] requires that any finite
-system execution must be extendable into an infinite execution that
-satisfies the given requirement (i.e., that does not produce a
-violation). </B>When fail events are present, we can express more
-than just liveness properties. For example we can express the
-simple safely property that a particular (fail) event should never
-occur. </SPAN></FONT></FONT></FONT>
+formal definition of liveness [8],[10] requires that any finite
+system execution must be extendable into an infinite execution that
+satisfies the given requirement (i.e., that does not produce a
+violation). </B>When fail events are present, we can express more
+than just liveness properties. For example we can express the simple
+safely property that a particular (fail) event should never occur. </SPAN></FONT></FONT></FONT>
 </P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Timeline
+editor is no longer distributed or maintained. :-( </SPAN></FONT></FONT></FONT>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">The
+pseudocode that follows provides a description of the translation of
+a timeline to a Büchi automata. ← use it!</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">------------------------------</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
@@ -244,172 +464,181 @@ logic of bugs</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">In
 the telecommunications industry a rather rigorous software
-development process was adopted in the seventies and eighties. The
+development process was adopted in the seventies and eighties. The
 development starts with requirements capture and documentation by
-system engineers. That phase is followed by high-level and low-level
-design (i.e., programming), followed by various stages of testing,
-and  finally customer acceptance. The final phase of the process is
-maintenance. In each phase errors can be introduced into the process
+system engineers. That phase is followed by high-level and low-level
+design (i.e., programming), followed by various stages of testing,
+and  finally customer acceptance. The final phase of the process is
+maintenance. In each phase errors can be introduced into the process
 and in each phase errors can be intercepted. The common wisdom is
-that the earlier a bug is intercepted, the less expensive it will be
-to fix it. </SPAN></FONT></FONT></FONT>
+that the earlier a bug is intercepted, the less expensive it will be
+to fix it. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">In
-the requirements phase, inconsistencies can be caught with basic
-requirements analysis techniques, in the high level design phases
+the requirements phase, inconsistencies can be caught with basic
+requirements analysis techniques, in the high level design phases
 errors are caught by prototyping, simulation, and modeling, in the
-low level design phase peer review sessions and targeted unit
-testing techniques can be used. In the final testing phase this
-consists of integration and customer acceptance testing.</SPAN></FONT></FONT></FONT></P>
+low level design phase peer review sessions and targeted unit testing
+techniques can be used. In the final testing phase this consists of
+integration and customer acceptance testing. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">All
-these techniques do in fact combine to intercept the majority of all
+these techniques do in fact combine to intercept the majority of all
 errors that are introduced. But these techniques do not bring the
-residual error rate down to zero. In all likelihood, not even the
-most diligent application of these traditional techniques could even
-bring the residual error rate down to zero.</SPAN></FONT></FONT></FONT></P>
+residual error rate down to zero. In all likelihood, not even the
+most diligent application of these traditional techniques could even
+bring the residual error rate down to zero. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
 situation is more interesting still for concurrent, and
-non-deterministically executing software. Almost all modern software
+non-deterministically executing software. Almost all modern software
 falls into this category. This is an ideal place where bugs can
-currently hide safely, immune to most of the currently used testing
-strategies. This time not just the input data can influence the
-computations but also the relative ordering of events that may occur
-in different parts of the system is important. The unpredictable
-ways in which multiple users can interact with the different parts
-of a physically distributed system become a factor, and similarly the
-unpredictable way in which schedulers run asynchronous threads of
+currently hide safely, immune to most of the currently used testing
+strategies. This time not just the input data can influence the
+computations but also the relative ordering of events that may occur
+in different parts of the system is important. The unpredictable ways
+in which multiple users can interact with the different parts of a
+physically distributed system become a factor, and similarly the
+unpredictable way in which schedulers run asynchronous threads of
 execution. Two issues complicate our ability to test or debug such
-systems: limited observability and limited controllability. </SPAN></FONT></FONT></FONT>
+systems: limited observability and limited controllability. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">The
-fundamental non-determinism that is exhibited by distributed systems
-makes it virtually impossible to test them thoroughly by traditional
-means.</SPAN></B></FONT></FONT></FONT></P>
+fundamental non-determinism that is exhibited by distributed systems
+makes it virtually impossible to test them thoroughly by traditional
+means. </SPAN></B></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">A
-second, more basic, problem is that the method we sketched above
-only helps us to find bugs in high-level system designs, and we may
-be more ambitious than that. We may, for instance, also want to use
-these methods to find typical bugs in implementation level code: the
-purview of classic software testing techniques. We know that in some
-cases it is possible to extract verification models from
+second, more basic, problem is that the method we sketched above only
+helps us to find bugs in high-level system designs, and we may be
+more ambitious than that. We may, for instance, also want to use
+these methods to find typical bugs in implementation level code: the
+purview of classic software testing techniques. We know that in some
+cases it is possible to extract verification models from
 implementation level code mechanically. Techniques to do so were
-developed for Java [3] and for C [6] and [2]. By using a combination
+developed for Java [3] and for C [6] and [2]. By using a combination
 of automated abstraction, model extraction, and logic model checking
 we may be able to increase the scope of applications sufficiently to
-make this approach to software verification more routine.</SPAN></FONT></FONT></FONT></P>
+make this approach to software verification more routine. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">We
 now come to the third and most underestimated problem in applications
 of automated tools to software verification: the problem of
-accurately capturing the correctness requirements that have to be
-verified. <B>Verifiers, and logic model checkers in particular,
-excel in their ability to show that specific requirements are
-either satisfied or may be violated. It is up to the user to come
-up with a comprehensive list of requirements to be checked, and to
-make sure that the requirements that are checked make sense. That is
-a more difficult task than many realize, as we will try to illustrate
-below. </B></SPAN></FONT></FONT></FONT>
+accurately capturing the correctness requirements that have to be
+verified. <B>Verifiers, and logic model checkers in particular, excel
+in their ability to show that specific requirements are either
+satisfied or may be violated. It is up to the user to come up with a
+comprehensive list of requirements to be checked, and to make sure
+that the requirements that are checked make sense. That is a more
+difficult task than many realize, as we will try to illustrate below.
+</B></SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
 standard method to express the correctness requirements for a model
 checking application is to use the formalism of temporal logic, as
-first proposed for this purpose by Amir Pnueli in [11]. In Linear
-Temporal Logic (LTL for short), as used in Spin [5], a small number
-of special operators are introduced to allow one to reason about
-sequences of events that are claimed to be causally related. We
-quickly notice that it is easier to reason about the type of error
+first proposed for this purpose by Amir Pnueli in [11]. In Linear
+Temporal Logic (LTL for short), as used in Spin [5], a small number
+of special operators are introduced to allow one to reason about
+sequences of events that are claimed to be causally related. We
+quickly notice that it is easier to reason about the type of error
 scenario that we want to prove to be infeasible, rather than the
-property itself. So let us switch to an LTL formula that captures
-the error behavior we are interested in.</SPAN></FONT></FONT></FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
-<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">We
-have made a very common mistake here in confusing logical
-implication with causal implication. The arrow operator is not a
-temporal operator. </SPAN></B></FONT></FONT></FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
-<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">It
-should be noted that even though coming up with an accurate
-formulation of this seemingly very simple error-condition is hard, it
-is still harder to come up with an accurate version of the positive
-system requirement that we started with (i.e., the logical negation
-of the last LTL property).</SPAN></FONT></FONT></FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
-<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">The
-automaton structure shown in Figure 2 looks more intuitive than its
-equivalent in LTL, but this too can be misleading. It can be
-difficult as well to specify complexrequirements accurate when
-directly coding an Z-automaton structure. In the first few
-distributed versions of the Spin model checker this was the primary
-means for specifying temporal properties. The addition of support
-for LTL syntax in Spin version 2.7 was seen by many users as a
-notable improvement. So if automata structures are not an adequate
-formalism, and temporal logic is not quite adequate, what
-alternatives remain? ← REALLY RELEVANT!</SPAN></B></FONT></FONT></FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
-<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">One
-proposal has been to prepare a library of predefined LTL formulae
-from which a user can choose, based on short template descriptions
-of each basic type of property [4]. This approach is often
-effective, but it cannot avoid cases where incomplete intuition
-leads to the selection of either an incorrect or an incomplete
-pattern.  We have pursued an alternative approach, based on the
-development of an intuitive graphical editor for the specification of
-basic temporal properties [12].</SPAN></B></FONT></FONT></FONT></P>
-<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
-<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">The
-types of requirements that can be specified in this way are more
-limited than the full use of LTL allows, but this appears not to be
-a significant restriction. (There may actually be some benefit in
-avoiding the full complexity of LTL.) The correct version of the
-dialtone property, for instance, is specified with the TimeLine
-editor as illustrated in Figure 3. Of course, also the intuition
-that is supported by timeline specifications cannot prevent
-occasional mistakes. </SPAN></B></FONT></FONT></FONT>
+property itself. So let us switch to an LTL formula that captures the
+error behavior we are interested in. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
-<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><SPAN STYLE="font-weight: normal">The
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">We
+have made a very common mistake here in confusing logical implication
+with causal implication. The arrow operator is not a temporal
+operator. </SPAN></B></FONT></FONT></FONT>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">It
+should be noted that even though coming up with an accurate
+formulation of this seemingly very simple error-condition is hard, it
+is still harder to come up with an accurate version of the positive
+system requirement that we started with (i.e., the logical negation
+of the last LTL property). </SPAN></FONT></FONT></FONT>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">The
+automaton structure shown in Figure 2 looks more intuitive than its
+equivalent in LTL, but this too can be misleading. It can be
+difficult as well to specify complex requirements accurate when
+directly coding an Z- automaton structure. In the first few
+distributed versions of the Spin model checker this was the primary
+means for specifying temporal properties. The addition of support for
+LTL syntax in Spin version 2.7 was seen by many users as a notable
+improvement. So if automata structures are not an adequate formalism,
+and temporal logic is not quite adequate, what alternatives remain? ←
+REALLY RELEVANT!</SPAN></B></FONT></FONT></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">One
+proposal has been to prepare a library of predefined LTL formulae
+from which a user can choose, based on short template descriptions of
+each basic type of property [4]. This approach is often effective,
+but it cannot avoid cases where incomplete intuition leads to the
+selection of either an incorrect or an incomplete pattern. We have
+pursued an alternative approach, based on the development of an
+intuitive graphical editor for the specification of basic temporal
+properties [12]. </SPAN></B></FONT></FONT></FONT>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">The
+types of requirements that can be specified in this way are more
+limited than the full use of LTL allows, but this appears not to be a
+significant restriction. (There may actually be some benefit in
+avoiding the full complexity of LTL.) The correct version of the
+dialtone property, for instance, is specified with the TimeLine
+editor as illustrated in Figure 3. Of course, also the intuition that
+is supported by timeline specifications cannot prevent occasional
+mistakes. </SPAN></B></FONT></FONT></FONT>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
+<FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
 three events of interest in the dialtone property, for instance, can
 be assigned in several different ways to constraints underneath the
-timeline, or to optional, required, or failure events within the
-timeline. Unlike the various forms of LTL formulae, though, each
-such variant of a timeline is visually no more complex than any
-other. The hope is that this visual simplicity allows the user to
-co</SPAN></SPAN></FONT></FONT></FONT></P>
+timeline, or to optional, required, or failure events within the
+timeline. Unlike the various forms of LTL formulae, though, each such
+variant of a timeline is visually no more complex than any other. The
+hope is that this visual simplicity allows the user to co</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">centrate
-on the meaning of a property, rather than on the subtleties of its
-formalization. To support that intuition, the user can inspect the
-precise structure of the Z-automaton that corresponds to the
-timeline as specified. The timeline shown in Figure 3 precisely
-corresponds to the Z-automaton from Figure 2.</SPAN></FONT></FONT></FONT></P>
+on the meaning of a property, rather than on the subtleties of its
+formalization. To support that intuition, the user can inspect the
+precise structure of the Z- automaton that corresponds to the
+timeline as specified. The timeline shown in Figure 3 precisely
+corresponds to the Z-automaton from Figure 2. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">Many
-of these mistakes can effectively be intercepted with the help of
-traditionally used tools, ranging from compilers to static analyzers
+of these mistakes can effectively be intercepted with the help of
+traditionally used tools, ranging from compilers to static analyzers
 and runtime checkers. We know of only one effective method that can
-be used to intercept concurrency related errors though: logic model
-checking. But also in applications of logic model checking errors
-can creep in. For instance, when the formal models are manually
+be used to intercept concurrency related errors though: logic model
+checking. But also in applications of logic model checking errors can
+creep in. For instance, when the formal models are manually
 constructed, bugs can enter the models and hide requirement
-violations from view. We can mitigate the effect of this by using
+violations from view. We can mitigate the effect of this by using
 techniques for automated model extraction, e.g., as in [3], [6], and
 [2]. With a software verification process based on model extraction
-and logic model checking techniques, the one final place where bugs
-can comfortably hide is in the property definitions. The formulation
+and logic model checking techniques, the one final place where bugs
+can comfortably hide is in the property definitions. The formulation
 of the requirements for a software artifact is a fundamentally human
-task, and as such unavoidably subject to human error. The commonly
-used formalism of Linear Temporal Logic can challenge the (human)
+task, and as such unavoidably subject to human error. The commonly
+used formalism of Linear Temporal Logic can challenge the (human)
 verifier’s intuition, which can seriously jeopardize the validity
 of verification efforts. As a counter-measure, we have discussed the
 use of a simple visual formalism that can support our intuition more
-effectively. The lesson learned from these tools is that it can
-sometimes be wise to trade generality for confidence.</SPAN></B></FONT></FONT></FONT></P>
+effectively. The lesson learned from these tools is that it can
+sometimes be wise to trade generality for confidence. </SPAN></B></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">------------------------------</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
@@ -417,117 +646,119 @@ sometimes be wise to trade generality for confidence.</SPAN></B></FONT></FONT>
 A Framework for Designing and Verifying Architectural Specifications</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
-notation used for modeling the software architecture is based on
-UML; even if UML is not the most suitable notation for modeling
-software architectures, it is widely adopted in industries. However,
-the CHARMY notation has a formal semantics, and thus it forces the
-software architect to resolve ambiguities that could be present in a
-standard UML-based software architecture specification.  </SPAN></FONT></FONT></FONT>
+notation used for modeling the software architecture is based on UML;
+even if UML is not the most suitable notation for modeling software
+architectures, it is widely adopted in industries. However, the
+CHARMY notation has a formal semantics, and thus it forces the
+software architect to resolve ambiguities that could be present in a
+standard UML-based software architecture specification. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
 model checker used by CHARMY is SPIN. Therefore, the software
-architecture, modeled in terms of CHARMY diagrams, is automatically
-translated in Promela that is the specification language of SPIN.
-These properties are typically specified as linear-time formulas in
-suitable temporal logics. In general, it is a difficult task to
-accurately and correctly express properties in these logics. For
-this reason, CHARMY temporal properties are specified as Properties
-Sequence Charts (PSCs) [4]. PSC is a scenario-based visual language
-for describing temporal properties.  </SPAN></FONT></FONT></FONT>
+architecture, modeled in terms of CHARMY diagrams, is automatically
+translated in Promela that is the specification language of SPIN.
+These properties are typically specified as linear-time formulas in
+suitable temporal logics. In general, it is a difficult task to
+accurately and correctly express properties in these logics. For this
+reason, CHARMY temporal properties are specified as Properties
+Sequence Charts (PSCs) [4]. PSC is a scenario-based visual language
+for describing temporal properties.  </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
-tool has a plugin-based architecture, which allows an easy and
-rapid integration of new modeling and analysis techniques. A CHARMY
-specification of an SA is given in terms of components, connectors,
-their internal behavior, and relations among them. </SPAN></FONT></FONT></FONT></P>
+tool has a plugin-based architecture, which allows an easy and rapid
+integration of new modeling and analysis techniques. A CHARMY
+specification of an SA is given in terms of components, connectors,
+their internal behavior, and relations among them. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">State
-diagrams are described using the State Transition Diagram  notation
+diagrams are described using the State Transition Diagram notation
 (close to the Promela syntax) Labels on arcs are structured as
-follows: ‘[‘guard’]’ event ‘(‘parameter’)“/’ ‘op1
-’ ‘op2 ’ Á Á Á ‘opn ’, where guard is a Boolean
-condition that allows the transition activation, i.e., two state
-diagrams are synchronized only if the guard condition becomes true.
-The elements that can be written into the guard are variables local
-to the state diagram. An event can be a message sent or received
-(denoted by an exclamation mark “!” or a question mark “?”,
-respectively), or an internal operation (#) (i.e., an event that
-does not require synchronization among state diagrams). An event</SPAN></FONT></FONT></FONT></P>
+follows: ‘[‘guard’]’ event ‘(‘parameter’)“/’ ‘op1
+’ ‘op2 ’ Á Á Á ‘opn ’, where guard is a Boolean
+condition that allows the transition activation, i.e., two state
+diagrams are synchronized only if the guard condition becomes true.
+The elements that can be written into the guard are variables local
+to the state diagram. An event can be a message sent or received
+(denoted by an exclamation mark “!” or a question mark “?”,
+respectively), or an internal operation (#) (i.e., an event that does
+not require synchronization among state diagrams). An event </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">can
 have a parameter that is the value that will be exchanged between a
-pair of components when the transition fires. op1 ; op2 ; . . . ;
-opn are the operations to be executed when the transition fires.</SPAN></FONT></FONT></FONT></P>
+pair of components when the transition fires. op1 ; op2 ; . . . ; opn
+are the operations to be executed when the transition fires. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">the
-parallel operator is the interleaving among the messages contained
+parallel operator is the interleaving among the messages contained
 into the parallel operands; <B>← not real concurrency </B></SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">State
-diagrams do not contain synchronization information among
-components; and thus if a message is not contained in any sequence
-diagram, the specification is incomplete. Complex communication,
-i.e., <B>multicast</B> communication, is modeled by means of
-connectors that can only send and receive synchronous messages.  ←
-multicast with UML?</SPAN></FONT></FONT></FONT></P>
+diagrams do not contain synchronization information among components;
+and thus if a message is not contained in any sequence diagram, the
+specification is incomplete. Complex communication, i.e., <B>multicast</B>
+communication, is modeled by means of connectors that can only send
+and receive synchronous messages. ← multicast with UML?</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent"><B>Active</B>
-is a Promela statement for proctypes that are initial processes,
-i.e., processes that do not need instantiation. A state description
-is composed of several parts. It contains a description of the set
-of transitions, which defines what happens when a transition from
-that state fires. Each transition in the state diagram is translated
-into a goto Promela statement to reach the target state of the
-transition.</SPAN></FONT></FONT></FONT></P>
+is a Promela statement for proctypes that are initial processes,
+i.e., processes that do not need instantiation. A state description
+is composed of several parts. It contains a description of the set of
+transitions, which defines what happens when a transition from that
+state fires. Each transition in the state diagram is translated into
+a goto Promela statement to reach the target state of the transition.
+</SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Listing
-4 that nondeterministically chooses one of the two possible
-interleaved behaviors: the dispatching of m2 followed by the
-dispatching of m3 or vice versa.  ← ach, you must interleave them
-by hand (all variations/permuatations)</SPAN></FONT></FONT></FONT></P>
+4 that nondeterministically chooses one of the two possible
+interleaved behaviors: the dispatching of m2 followed by the
+dispatching of m3 or vice versa. ← ach, you must interleave them by
+hand (all variations/permuatations)</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Analogously,
 the alternative operator allows the definition of alternative
-behaviors, and then it is encoded by means of the Promela operator
-for nondeterminism. ← how about if the alternative depends on a
+behaviors, and then it is encoded by means of the Promela operator
+for nondeterminism. ← how about if the alternative depends on a
 local component variable? How is the choice made? Otherwise it's an
 overapproximation</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">PSCs
 are an extension of a subset of the UML 2.0 Sequence Diagrams
-stereotyped so that: each rectangular box represents an
-architectural component, each arrow defines a message exchanged among
-two components. In order to clearly distinguish between mandatory,
-forbidden, and provisional messages, PSC provides three different
-types of messages to specify that a message can be mandatory,
-forbidden, or provisional ← why not use assert/negate</SPAN></B></FONT></FONT></FONT></P>
+stereotyped so that: each rectangular box represents an architectural
+component, each arrow defines a message exchanged among two
+components. In order to clearly distinguish between mandatory,
+forbidden, and provisional messages, PSC provides three different
+types of messages to specify that a message can be mandatory,
+forbidden, or provisional ← why not use assert/negate</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Unwanted
 message constraints are graphically represented as filled circles
-(see Fig. 9). Wanted and unwanted chain constraints are graphically
-represented as arrows and crossed arrows, respectively (see Fig.
-9). ←how about wanted message constraints? Is this in term of
-message exchanges only?</SPAN></FONT></FONT></FONT></P>
+(see Fig. 9). Wanted and unwanted chain constraints are graphically
+represented as arrows and crossed arrows, respectively (see Fig. 9).
+←how about wanted message constraints? Is this in term of message
+exchanges only?</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Informally,
-the parallel operator allows a parallel merge of the message
-sequence within its operands. The messages posing as arguments of
-the operands can be interleaved in any way as long as the ordering
-imposed by each operand as such is preserved.  ← again, what
-about true concurrency? Where is that expressed? You need the notion
-of OS processes. </SPAN></FONT></FONT></FONT>
+the parallel operator allows a parallel merge of the message sequence
+within its operands. The messages posing as arguments of the operands
+can be interleaved in any way as long as the ordering imposed by each
+operand as such is preserved. ← again, what about true concurrency?
+Where is that expressed? You need the notion of OS processes. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
-plugin architecture of CHARMY promotes an easy integration of new
-features. For instance, in case, we are interested in changing the
-model checker engine, and thus we are interested in substituting
-SPIN we have only to write a new plugin that, starting from the
-CHARMY notation, generates the input (e.g., written in BIR if the
-selected model checker is Bogor [33]) of the new model checker.  </SPAN></FONT></FONT></FONT>
+plugin architecture of CHARMY promotes an easy integration of new
+features. For instance, in case, we are interested in changing the
+model checker engine, and thus we are interested in substituting SPIN
+we have only to write a new plugin that, starting from the CHARMY
+notation, generates the input (e.g., written in BIR if the selected
+model checker is Bogor [33]) of the new model checker. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Fig
@@ -535,81 +766,81 @@ selected model checker is Bogor [33]) of the new model checker.  </SPAN></FONT
 one diagram with [alt]</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
-circle labeled b identifies a constraint of the message. It means
-that the message withdraw that has associated the constraint is a
-valid precondition iff before this message and after the previous
-one (i.e., login), T M does not send noconnection to BA.</SPAN></FONT></FONT></FONT></P>
+circle labeled b identifies a constraint of the message. It means
+that the message withdraw that has associated the constraint is a
+valid precondition iff before this message and after the previous one
+(i.e., login), T M does not send noconnection to BA .</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">However,
-one aspect that should be always considered in modeling systems is
-that the right abstraction level is the one that allows us to verify
-the properties of interest, i.e., additional details are not useful
-and can make the system intractable. Consequently, every nonuseful
-detail should be cut off or abstracted. However, CHARMY gives to
-the designer instruments for designing very detailed systems, as
-sometimes required by the system under analysis, such as internal
-transitions, variables, guards, etc. ← right, where are those
+one aspect that should be always considered in modeling systems is
+that the right abstraction level is the one that allows us to verify
+the properties of interest, i.e., additional details are not useful
+and can make the system intractable. Consequently, every nonuseful
+detail should be cut off or abstracted. However, CHARMY gives to the
+designer instruments for designing very detailed systems, as
+sometimes required by the system under analysis, such as internal
+transitions, variables, guards, etc. ← right, where are those
 variables? And how is data represented?</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
-usual techniques consist of slicing and abstracting the system, in
-limiting (to the minimum necessary for analysis purposes) the
-number of instances of a certain component/connector and in</SPAN></FONT></FONT></FONT></P>
+usual techniques consist of slicing and abstracting the system, in
+limiting (to the minimum necessary for analysis purposes) the number
+of instances of a certain component/connector and in </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">making
 use of compositional reasoning approaches that aim to reduce the
-verification of a system to the verification of a set of small
-subsystems. </SPAN></FONT></FONT></FONT>
+verification of a system to the verification of a set of small
+subsystems. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">A
-slicing and abstraction approach has been proposed in [13]. This
-approach exploits the characteristic of the SA model and the
-structure of the property of interest and tries to reduce the model
-complexity without compromising the verification validity of the
-considered property. In the approach that we proposed, the slicing
-criterion was the property we want to check on the SA. Due to the
-architectural slicing, we are able to extract the parts of the
-system that play a role on the behavior implied by the property of
-interested.  </SPAN></FONT></FONT></FONT>
+slicing and abstraction approach has been proposed in [13]. This
+approach exploits the characteristic of the SA model and the
+structure of the property of interest and tries to reduce the model
+complexity without compromising the verification validity of the
+considered property. In the approach that we proposed, the slicing
+criterion was the property we want to check on the SA. Due to the
+architectural slicing, we are able to extract the parts of the system
+that play a role on the behavior implied by the property of
+interested. </SPAN></FONT></FONT></FONT>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Even
-though UML is widely used and supported by professional tools, its
-principal drawback is the absolute lack of formality. The result is
+though UML is widely used and supported by professional tools, its
+principal drawback is the absolute lack of formality. The result is
 that each designer assumes his own semantics and accordingly designs
-the system. However, the CHARMY notation has a formal semantics and
-forces the software architect to resolve ambiguities that could be
-present in a standard UML-based software architecture
-specification. The choice we made in CHARMY is to use diagrams most
-commonly used by industries. Since the different diagrams are
-different views of the same system, we ensure consistency among
-these diagrams and we extract a complete system description from
-components, state, and sequence diagrams.  ← you get this for
-free with most UML tools</SPAN></FONT></FONT></FONT></P>
+the system. However, the CHARMY notation has a formal semantics and
+forces the software architect to resolve ambiguities that could be
+present in a standard UML-based software architecture specification.
+The choice we made in CHARMY is to use diagrams most commonly used by
+industries. Since the different diagrams are different views of the
+same system, we ensure consistency among these diagrams and we
+extract a complete system description from components, state, and
+sequence diagrams. ← you get this for free with most UML tools</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Typically,
-other approaches that generate a formal description starting from
+other approaches that generate a formal description starting from
 UML, even if not at the architectural level, consider only one type
-of diagram. The solution proposed by CHARMY allows the software
-architect to represent each aspect in a natural way, using for each
-aspect the most appropriate diagram (e.g., sequence diagrams are the
-most used and more appropriate diagrams to explicitly represent
-communication among subparts that compose the system). ← well,
-not us!</SPAN></FONT></FONT></FONT></P>
+of diagram. The solution proposed by CHARMY allows the software
+architect to represent each aspect in a natural way, using for each
+aspect the most appropriate diagram (e.g., sequence diagrams are the
+most used and more appropriate diagrams to explicitly represent
+communication among subparts that compose the system). ← well, not
+us!</SPAN></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">CHARMY
-aims to bring the gap between formal methods and its applicability
-in real contexts by means of notations close to what really used in
-industrial contexts.</SPAN></FONT></FONT></FONT></P>
+aims to bring the gap between formal methods and its applicability in
+real contexts by means of notations close to what really used in
+industrial contexts. </SPAN></FONT></FONT></FONT>
+</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">We
-are currently investigating how to exploit the behavioral
-information present in a CHARMY specification for generating the
-Java code. The idea is to generate an encoding of the CHARMY state
-diagrams in order to force the system implementation to behave
-accordingly to the state diagram models. ← state machines for
-DIRAC</SPAN></B></FONT></FONT></FONT></P>
+are currently investigating how to exploit the behavioral information
+present in a CHARMY specification for generating the Java code. The
+idea is to generate an encoding of the CHARMY state diagrams in order
+to force the system implementation to behave accordingly to the state
+diagram models . ← state machines for DIRAC</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">------------------------------</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
@@ -686,8 +917,9 @@ design and coding. These steps are coupled through automatic code
 generation from a formal (synchronous) model, which allows generating
 a fully certifiable code from the software design. This method and
 technologies have been used for more than 10 years now and are now
-fully accepted by certification authorities as a safe way to develop
-code. The added value of the </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">work
+fully </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">accepted
+by certification authorities as a safe way to develop code. The added
+value of the </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">work
 done in FMDE is to generate SPARK / ADA code (instead of C code) that
 is amenable to formal proof. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">The
 SPARK Pro Toolset can verify the correctness of programs by using
@@ -771,7 +1003,7 @@ class diagrams can be represented well by DL, and properties of state
 transition diagrams can be expressed by LTL.</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">LTLDL
 extends LTL by allowing DL formulae in addition to atomic
-propositions at locations where only atomic propositions are allowed
+propositions at locations where only atomic propositions are </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">allowed
 in LTL.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">Hence
 both LTL and DL are contained in LTLDL. The following are ALC
@@ -859,8 +1091,9 @@ hardware. This stands in contrast to, e.g., purely model-based
 approaches. The disadvantage is that testing explores typically only
 a limited number of program behaviors. Even if all program paths are
 explored, only a limited set of inputs can be examined, and
-significant manual effort is required to find the appropriate test
-cases. One of the most </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">significant
+</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">significant
+manual effort is required to find the appropriate test cases. One of
+the most </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">significant
 disadvantages is that testing does not scale well to large code
 bases. There are typically an overwhelming number of test cases to
 consider to achieve a satisfactory coverage. ← for ppt?</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
@@ -1024,9 +1257,9 @@ with respect to a certain specification, the system is indeed
 correct. On the other hand, we call a method complete if it does not
 raise false alarms, i.e. if it does not report spurious errors. As we
 have already indicated above, sometimes, the potential of a method to
-be sound is sacrificed in order to increase the efficiency of the
-approach, leading to an error detection approach with formal
-</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">verification
+be sound is sacrificed in </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">order
+to increase the efficiency of the approach, leading to an error
+detection approach with formal </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">verification
 roots. ← for ppt</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">A
@@ -1743,8 +1976,9 @@ this section we introduce a list of OCL specification patterns that
 are useful for behavioral specification of software components. To
 obtain this list we first studied several case studies (dealing with
 business components) and publications about component specifications
-and identified frequently occurring patterns [3]. In a second step we
-analyzed the preliminary list and identified </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">additional
+and identified </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">frequently
+occurring patterns [3]. In a second step we analyzed the preliminary
+list and identified </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">additional
 patterns that are useful but could not be found in the first step.
 (Reasons to include additional patterns were for instance extending
 patterns to other relevant UML metamodel elements or symmetry
@@ -2334,8 +2568,9 @@ Interval Logic (GIL) has a formal model-theoretic semantics and is
 more expressive than propositional temporal logic with Until and
 without Next 27]. It thus provides an intuitive and natural visual
 notation in which to express system speci cations without sacri cing
-the bene ts of a formal notation. A visual editor allows GIL speci
-cations to be easily constructed and to be stored in and </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">retrieved
+the bene ts of a formal </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">notation.
+A visual editor allows GIL speci cations to be easily constructed and
+to be stored in and </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">retrieved
 from les. The editor also provides a visual interface to a proof
 checker and model generator, which permit veri cation of temporal
 inferences. When reasoning about temporal properties exhibited by a
@@ -2413,9 +2648,9 @@ number of behaviors than their corresponding specifications.</SPAN></FONT></FONT
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">Our
 semantic treatment of SDs proceeds roughly as follows: (i) Given a
 set of SDs, we translate each SD to a hierarchic automaton that may
-contain negative states. (ii) We separate the negative states from
-the positive ones by defining a construction that extracts a negative
-hierarchic </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">automaton
+contain negative states. (ii) We separate the negative </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">states
+from the positive ones by defining a construction that extracts a
+negative hierarchic </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">automaton
 and a positive hierarchic automaton from the original hierarchic
 automaton. (iii) </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">We
 construct a safety Buchi automaton from the negative hierarchic
@@ -2754,8 +2989,8 @@ from), a1 (for to) and true (for ok ). The notation? denotes that any
 value can be accepted for a parameter. A partial event is one in
 which some of the values for parameters are missing, e.g. answer
 .b.a1 is only a partial event. &nbsp;← </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">partial
-events with any-value-for-parameter, useful for future work! meeting
-also!</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
+events with any-value-for-</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">parameter,
+useful for future work! meeting also!</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">In
 sequence diagrams events will appear as labels of arrows between
@@ -2940,8 +3175,9 @@ the semantic level without struggling with complicated formal
 notations. These patterns are pre-defined, each providing an informal
 expression to describe certain function and the formalization method
 of such expression. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">Although
-researchers proposed many patterns to help handle commonly occurred
-problems on </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">specification
+</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">researchers
+proposed many patterns to help handle commonly occurred problems on
+</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">specification
 constructions, such as the well-known design patterns [4], developers
 have to understand the provided solutions before they can apply</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
@@ -3189,8 +3425,8 @@ as we additionally cover explicit timing annotations.</SPAN></FONT></FONT></FONT
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-weight: normal; line-height: 114%">
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">In
 contrast to temporal logic formulae-based approaches, non-experts can
-more easily capture the final sentence in structured English than
-just by CTL or LTL. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">However,
+more easily capture the </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">final
+sentence in structured English than just by CTL or LTL. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">However,
 it turned out that this </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">approach
 leads to quite long sentences and remains too cumbersome for more
 complex applications, so that we started to investigate alternative
@@ -3669,9 +3905,9 @@ In [53] communication sis synchronous ← for ppt? Ne valja ova a?</SPAN></SPAN>
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">Petri
 Net semantics: one approach does not allow for nesting of high-level
 operators; another one:translation of the choice operator is
-sketched, but no loop defined; yet another one: semantics for UML 1.x
-sequence diagrams is presented, but as with the Petri-net semantics
-of basic MSCs it </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">has
+sketched, but no loop defined; yet another one: semantics </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">for
+UML 1.x sequence diagrams is presented, but as with the Petri-net
+semantics of basic MSCs it </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">has
 major limitations </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">How
 about this? sounds a bot like my approach ppt:</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
@@ -3986,9 +4222,9 @@ we present a scenario-based visual language called Property Sequence
 Chart (PSC) that, in our opinion, fixes the highlighted lacks of
 these notations by extending a subset of UML 2.0 Interaction Sequence
 Diagrams</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">.
-We also provide PSC with both denotational and operational semantics.
-The operational semantics is obtained via translation into B ̈chi
-automata </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">and
+We also provide PSC with both denotational and </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">operational
+semantics. The operational semantics is obtained via translation into
+B ̈chi automata </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">and
 the translation algorithm is implemented as a plugin of our Charmy
 tool. Expressiveness of PSC has been validated with respect to well
 known property specification patterns.</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
@@ -4063,9 +4299,9 @@ Project, 2004) which is a framework (based on the model checker Spin
 (Holzmann, 2003)) for software architecture design and verification
 with respect to temporal properties. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">We
 measured the expressiveness of our language with respect to the set
-of property specification patterns proposed in (Dwyer et al., 1999)
-that captures recurring solutions to design and coding problems. ←
-for </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">meeting,
+of property specification patterns proposed </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">in
+(Dwyer et al., 1999) that captures recurring solutions to design and
+coding problems. ← for </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">meeting,
 for future work!</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><B><SPAN STYLE="background: transparent">Even
@@ -4303,8 +4539,9 @@ vs lifelines, notice!</SPAN></B></FONT></FONT></FONT></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-weight: normal; line-height: 114%">
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">In
 this section we give the PSC operational semantics in terms of Buchi
-automata that can be seen as operational representations of PSC
-scenarios. In fact, it is well-known (Gerth et al., 1995; Clarke </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">et
+automata that can be seen </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">as
+operational representations of PSC scenarios. In fact, it is
+well-known (Gerth et al., 1995; Clarke </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">et
 al., 2001) that all LTL formulas, and hence also all the PSC
 scenarios, can be translated into a Buchi automaton. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">A
 well known method for describing sets of acceptable or unacceptable
@@ -4658,8 +4895,9 @@ but not in CTL and vice versa. LTL formulas express properties of one
 possible system behavior. They are checked on the fly. CTL formulas
 express the set of all possible behaviors starting in a state. They
 are checked on all the state space. In LTL the future of a state in a
-run is inevitable, whereas in CTL a state usually has many different
-possible futures. Thus, generally speaking, CTL </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">expresses
+run is inevitable, whereas in </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">CTL
+a state usually has many different possible futures. Thus, generally
+speaking, CTL </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">expresses
 possibility properties whereas LTL expresses properties that are
 inevitable.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><U><SPAN STYLE="background: transparent">
 </SPAN></U></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><U><B><SPAN STYLE="background: transparent">In
@@ -4762,7 +5000,7 @@ state-oriented real-time constraints. It provides an intuitive
 understanding and readability at application level since common OCL
 syntax and concepts are preserved. A well-defined formal semantics is
 given through the mapping of temporal OCL expressions to temporal
-logics formulae.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><U><SPAN STYLE="background: transparent">
+logics </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">formulae.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><U><SPAN STYLE="background: transparent">
 </SPAN></U></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><U><B><SPAN STYLE="background: transparent">Moreover,
 UML and OCL are missing adequate means to specify constraints over
 </SPAN></B></U></SPAN></FONT></FONT></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><U><B><SPAN STYLE="background: transparent">the
@@ -4846,9 +5084,9 @@ system state sequences as life cycles. ← for meeting</SPAN></B></FONT></FONT><
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">In
 this paper, we present an extension of OCL with important elements of
 a finite linear temporal logic. Past and future temporal operators
-are introduced. Our extended version of OCL, which we call TOCL
-(Temporal OCL), is capable of specifying constraints on the temporal
-development of a </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">system’s
+are introduced. Our extended version of OCL, which we </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">call
+TOCL (Temporal OCL), is capable of specifying constraints on the
+temporal development of a </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">system’s
 structure. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">The
 @next</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">modifier
@@ -5107,8 +5345,9 @@ in Figure 2)</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="fo
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">can
 be used by S PIDER to guide the developer in deriving a natural
 language property in a syntax-guided fashion [19]. While the grammar
-follows the structure of the specification pattern system by Dwyer et
-al. [5], LTL property templates that are not well-</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">suited
+follows the structure </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">of
+the specification pattern system by Dwyer et al. [5], LTL property
+templates that are not well-</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">suited
 for the specification of witness scenarios have been modified. ← a
 very simple grammar! </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
 </P>
@@ -6103,7 +6342,7 @@ model-checking formalism from the user. (for ppt. also the following)</SPAN></B>
 main contribution of this work is to provide an efficient mechanism
 to be able to track the execution state of an interaction, which
 allows designers to write relevant properties involving send/receive
-events and source/destination of messages using LTL. Another
+events and source/destination of messages using LTL. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">Another
 important contribution is the definition of the PROMELA structure
 that provides a </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">precise
 semantics of most of the newly UML 2.0 introduced combined fragments,
@@ -6483,7 +6722,8 @@ thus we adopt the formal definition of a sequence diagram given in
 [8] </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">to
 a single lifeline</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">rather
-than the diagram as a whole. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">In
+than the diagram as a </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">whole.
+</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">In
 our formal model of components, the system behaviour exhibited during
 the </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">execution
 of the scenario as a whole is then given in terms of composition of
@@ -6869,8 +7109,9 @@ logic are formalised through equational rewrite rules. Defining data
 sorts through structured sorts introduces a few built-in mappings and
 relations, such as projection functions, equality and inequality.
 Expressions in the data language can be built by combining sort
-constructors, functions, relations and data variables. &lt;-- for
-ppt: if you use structured sorts, you get some things for free </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
+constructors, functions, </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">relations
+and data variables. &lt;-- for ppt: if you use structured sorts, you
+get some things for free </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">Of
@@ -7413,8 +7654,9 @@ nice example that certain liveness properties cannot be expressed
 with assert or negate. Therefore, they propose an after/eventually
 OCL template, which says that after a condition becomes true there is
 a guarantee that eventually another condition will become true.
-Moreover, they introduce global constraints and methods for
-synchronization at the beginning or end of </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">CombinedFragments.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
+Moreover, they introduce </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">global
+constraints and methods for synchronization at the beginning or end
+of </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">CombinedFragments.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">The
 authors point out that with the basic interpretation of negative
@@ -8140,8 +8382,9 @@ type. This permits the modelling of systems whose behaviour crucially
 depends on the data that is exchanged: actions can be parameterised
 by data and if-then-else constructs allow for specifying conditional
 process behaviour. The semantics of processes is defined using a
-structural operational semantics, which associates with every
-expression in the language a labelled transition system </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">(LTS).
+structural operational </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">semantics,
+which associates with every expression in the language a labelled
+transition system </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">(LTS).
 Such a labelled transition system is viewed as a graph consisting of
 vertices and edges, where each edge is labelled with an action, which
 in turn can have data parameters. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
@@ -8485,8 +8728,8 @@ home logic, describes intra-object behaviour.</SPAN></SPAN></FONT></FONT></SPAN>
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">One
 of the major changes made to UML 2.0 with respect to its previous
 versions concerns sequence diagrams which have been extended to
-include a number of features borrowed from message sequence charts
-(MSCs)</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
+include a number of features </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">borrowed
+from message sequence charts (MSCs)</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">[6]
 and, to a limited extent, live sequence </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">charts
 (LSCs) [5]. As a consequence, UML’s sequence diagrams are now more
@@ -9741,8 +9984,9 @@ language or in terms of UML itself; see [10,11]. Therefore, as
 pointed out in [12], multiple and potentially contradictory
 interpretations of one and the same model are not excluded, and
 automatic interpretation must be hard coded in some way or another in
-the tool chain. Another matter is whether object-oriented programming
-concepts provide the right modelling concepts. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">However,
+the tool chain. Another matter </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">is
+whether object-oriented programming concepts provide the right
+modelling concepts. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">However,
 according to [16], the UML specification is highly technical, terse,
 and very difficult for beginners to understand, and the question of
 [17] Why are some specifications so hard to read? Needless to say, an
@@ -10285,8 +10529,8 @@ for choice, sequential, parallel, and iterative composition.</SPAN></FONT></FONT
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">the
 most interesting addition to sequence diagrams in the UML 2.0
 standard are two new and crucial operators, assert and negate, which
-were probably intended to bring the multi-modal hot/cold essence of
-LSC into the new standard,</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
+were probably intended to bring the </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">multi-modal
+hot/cold essence of LSC into the new standard,</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">and
 to allow the specification of </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">required
 and forbidden behaviors, respectively. These two new operators
@@ -11280,7 +11524,7 @@ For that reason, we identify a subclass of livelocks, and present a
 method for finding </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">such
 livelocks within our framework. This is done by a reduction to a
 safety property, which requires a preceding syntactic analysis of the
-UML model.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
+UML </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">model.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-weight: normal; line-height: 114%">
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">Following,
 we present a characterization for a subclass of livelock CONFs, which
@@ -11439,10 +11683,10 @@ outgoing flow.</SPAN></FONT></FONT></FONT></P>
 describing complex real-time systems, including distributed ones.
 TRIO is a first-order linear temporal logic that supports a metric on
 time. The TRIO specification of a system includes a set of basic
-items, such as predicates, representing the elementary modeled
-phenomena. The system behavior over time is formally specified by a
-set of TRIO formulae, which state how the items are constrained and
-how </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">they
+items, such as </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">predicates,
+representing the elementary modeled phenomena. The system behavior
+over time is formally specified by a set of TRIO formulae, which
+state how the items are constrained and how </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">they
 vary in time, in a purely descriptive (or </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">declarative</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">)
 fashion. ← uhm, a set of formulae for describing system behavior?
 Not convenient! ← declarative vs procedural</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
@@ -11782,9 +12026,10 @@ also handle a classical negation operator [3], which avoids the
 introduction of three-valued logics as suggested by the UML 2.0
 specification by resorting to binary logic. A system of message
 exchanging UML state machines together with the generated automaton
-representing a UML interaction for observing message traces is
-translated into the input language of an off-the-shelf model checker,
-which then is called upon to check satisfiability. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">Currently,
+</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">representing
+a UML interaction for observing message traces is translated into the
+input language of an off-the-shelf model checker, which then is
+called upon to check satisfiability. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">Currently,
 we support interaction model checking over state machines with S PIN
 [6] and, partially, with U PPAAL [7]. ← brilliant, try this really!
 Especially see how it goes with SPIN, what the automata looks like!</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
@@ -11866,10 +12111,10 @@ basic interactions..</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 contrast to other approaches (e.g. [10,11]) we propose not to
 generate one automaton for every object in an interaction, but to use
 only a single observing interaction automaton for the entire
-interaction. This single automaton represents the property to be
-checked by a model checker. Our translation of basic interactions is
-a simplified version of the construction for Live Sequence Charts
-</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">(LSCs)
+</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">interaction.
+This single automaton represents the property to be checked by a
+model checker. Our translation of basic interactions is a simplified
+version of the construction for Live Sequence Charts </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">(LSCs)
 given by Brill et al. [12], the handling of weak sequencing cuts down
 techniques of Alur and Yannakakis for bounded MSCs [9]. These
 interaction fragments form the primitive blocks in our translation
@@ -12121,8 +12366,8 @@ interaction automata do not show recurrence states.</SPAN></FONT></FONT></FONT><
 Sequencing.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">A
 slight modification of the construction for parallel composition can
-be used for obtaining the weak sequential composition ← for ppt if
-they ask? </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
+be used for </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">obtaining
+the weak sequential composition ← for ppt if they ask? </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-weight: normal; line-height: 114%">
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">Strict</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
@@ -12742,9 +12987,10 @@ safety properties and not liveness properties. Stateless model
 checkers cannot handle liveness by definition since they cannot
 detect cycles</SPAN></B></U></SPAN></FONT></FONT></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">,
 but even model checkers like JPF and BOGOR do not support liveness;
-SPIN does support liveness but when using C code in the models, one
-must specify which part of the state must be tracked during model
-checking (exposing the hidden model). </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><U><B><SPAN STYLE="background: transparent">The
+SPIN </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">does
+support liveness but when using C code in the models, one must
+specify which part of the state must be tracked during model checking
+(exposing the hidden model). </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><U><B><SPAN STYLE="background: transparent">The
 most </SPAN></B></U></SPAN></FONT></FONT></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><U><B><SPAN STYLE="background: transparent">common
 types of properties are simply local safety properties in the form of
 assertion violations</SPAN></B></U></SPAN></FONT></FONT></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
@@ -12906,8 +13152,8 @@ of a transition system and then apply model-checking techniques. </SPAN></SPAN><
 construct a transition system which has one process for each actual
 object.</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 ← </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">another
-paper constructs a single automaton for the property, isn’t that
-more convenient? </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
+paper constructs a single automaton for the property, </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">isn’t
+that more convenient? </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN>
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">A
@@ -13346,8 +13592,8 @@ during the execution of activities in the activity group. </SPAN></FONT></FONT><
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">EIODs
 include the notion of a flow final node which can be used to show
 that a scenario results in failure EIODs may have two types of final
-nodes—a final node represents successful completion of the scenario
-and a</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
+nodes—a final node represents successful completion of </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">the
+scenario and a</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">flow
 final node</SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><SPAN STYLE="background: transparent">
 </SPAN></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">represents
@@ -13527,9 +13773,10 @@ ppt: realistic specifications can be captured?</SPAN></B></SPAN></FONT></FONT></
 first is a weather update subsystem of an air traffic control system
 developed at NASA [Denery et al. 1997]. The illustrative example used
 earlier in this article is a much simplified version of this
-subsystem. This particular example was used in an earlier article on
-synthesis [Whittle et al. 2005b]. Our particular contribution here is
-that we were able to use the extended features of EIODs to </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">generate
+</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">subsystem.
+This particular example was used in an earlier article on synthesis
+[Whittle et al. 2005b]. Our particular contribution here is that we
+were able to use the extended features of EIODs to </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">generate
 hierarchical state machines for the example. We gave the same
 scenarios as were used in Whittle et al. [2005b]. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">However,
 in Whittle et al. [2005b], heavy use of state invariants was made to
@@ -13603,10 +13850,10 @@ it’s actually one of the few that uses IODs.</SPAN></B></FONT></FONT></FONT></
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-weight: normal; line-height: 114%">
 <SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">Currently,
 users of UCSIM must develop a complete EIOD in order to generate
-HFSMs—in the sense that, if a scenario S2 follows S1 and if a
-scenario S4 follows S3, then the user must also specify a
-relationship between S2 and S3. Otherwise, there is not enough
-information </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">for
+HFSMs—in the </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">sense
+that, if a scenario S2 follows S1 and if a scenario S4 follows S3,
+then the user must also specify a relationship between S2 and S3.
+Otherwise, there is not enough information </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><B><SPAN STYLE="background: transparent">for
 UCSIM to decide how flow continues after S2. </SPAN></B></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><U><B><SPAN STYLE="background: transparent">At
 the level of requirements analysis, specifying such detailed
 information could be overly restrictive. It would be interesting to
@@ -14598,7 +14845,7 @@ specification of ordered sequences, non-deterministic sequences, and
 concurrency. For instance, an ordered sequence may define the left
 boundary of an after L scope, and multiple events that represent the
 synchronous start of multiple tasks may define the effect part of a
-response pattern. Prospec uses guided questions to distinguish the
+response pattern. Prospec uses guided questions to distinguish </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">the
 types of scope or relations among propositions when more than one
 proposition is considered. By answering a series of questions, the
 analyst is led to consider different aspects of the property. </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">The
@@ -14683,10 +14930,10 @@ Roughly speaking, a trace t1 simulates another trace t2 if all events
 in t2 are simulated in t1 in the order in which they occur and there
 are no observable events in t1 other than those that simulate events
 in t2 . An SD D1 refines another D2 if an implementation of D1 is
-also an implementation of D2 . In other words, D1 preserves the
-required behaviors of D2 but may specify more required behaviors.
-These concepts will be made clearer in Section V. The main
-contributions </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">of
+also an </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">implementation
+of D2 . In other words, D1 preserves the required behaviors of D2 but
+may specify more required behaviors. These concepts will be made
+clearer in Section V. The main contributions </SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN><SPAN STYLE="font-variant: normal"><FONT COLOR="#000000"><SPAN STYLE="text-decoration: none"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="background: transparent">of
 this work are as follows.</SPAN></SPAN></FONT></FONT></SPAN></FONT></SPAN></P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0in; font-variant: normal; font-style: normal; font-weight: normal; line-height: 114%; text-decoration: none">
 <FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3 STYLE="font-size: 11pt"><SPAN STYLE="background: transparent">A
